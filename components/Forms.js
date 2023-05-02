@@ -1,26 +1,26 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Picker, Section, SectionContent, Text } from 'react-native-rapi-ui';
-import { allGames } from '../firebase-config';
+import { getDocs } from 'firebase/firestore';
+import { colRef } from '../firebase-config';
 
 const Forms = () => {
-    const [gameValue, setGameValue] = useState(null);
-    const [playerValue, setPlayerValue] = useState(null);
-    const [games, setGames] = useState([]);
+    const [gameValue, setGameValue] = useState('');
+    const [playerValue, setPlayerValue] = useState('');
+    const [gameList, setGameList] = useState([]);
 
     useEffect(() => {
-        const fetchGames = async () => {
-            const snapshot = await allGames.once('value');
-            const gameList = [];
-            snapshot.forEach((childSnapshot) => {
-                gameList.push({
-                    label: childSnapshot.key,
-                    value: childSnapshot.val(),
-                });
-            });
-            setGames(gameList);
+        const getGames = async () => {
+            const data = await getDocs(colRef);
+            setGameList(
+                data.docs.map((doc) => ({
+                    ...doc.data(),
+                    id: doc.id,
+                    name: doc.data().name,
+                }))
+            );
         };
-        fetchGames();
+        getGames();
     }, []);
 
     const players = [
@@ -34,11 +34,14 @@ const Forms = () => {
                 <View>
                     <Picker
                         items={
-                            games?.length > 0
-                                ? games
+                            gameList?.length > 0
+                                ? gameList.map((list) => ({
+                                      label: list.name,
+                                      value: list.name,
+                                  }))
                                 : [{ label: 'Loading...', value: null }]
                         }
-                        value={games}
+                        value={gameValue}
                         placeholder="Wybierz grę"
                         onValueChange={(val) => setGameValue(val)}
                     />

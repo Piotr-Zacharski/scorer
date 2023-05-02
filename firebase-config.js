@@ -3,7 +3,6 @@ import {
     addDoc,
     collection,
     getFirestore,
-    onSnapshot,
     orderBy,
     query,
     serverTimestamp,
@@ -25,19 +24,12 @@ initializeApp(firebaseConfig);
 
 export const db = getFirestore();
 
-const colRef = collection(db, 'newGames');
+export const colRef = collection(db, 'newGames');
 
 const q = query(colRef, where('name', '==', 'Talizman'), orderBy('createdAt'));
 
 // Init Auth
 export const auth = getAuth();
-
-export const allGames = onSnapshot(q, (snapshot) => {
-    const games = [];
-    snapshot.docs.forEach((doc) => {
-        games.push({ ...doc.data(), id: doc.id });
-    });
-});
 
 export const addGame = async (gameName) => {
     try {
