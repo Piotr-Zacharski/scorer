@@ -1,5 +1,14 @@
 import { initializeApp } from 'firebase/app';
-import { addDoc, collection, getDocs, getFirestore } from 'firebase/firestore';
+import {
+    addDoc,
+    collection,
+    getFirestore,
+    onSnapshot,
+    orderBy,
+    query,
+    serverTimestamp,
+    where,
+} from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -14,26 +23,27 @@ const firebaseConfig = {
 // Init Firebase
 initializeApp(firebaseConfig);
 
-const db = getFirestore();
+export const db = getFirestore();
 
 const colRef = collection(db, 'newGames');
+
+const q = query(colRef, where('name', '==', 'Talizman'), orderBy('createdAt'));
 
 // Init Auth
 export const auth = getAuth();
 
-export const allGames = getDocs(colRef)
-    .then((snapshot) => {
-        const games = [];
-        snapshot.docs.forEach((doc) => {
-            games.push({ ...doc.data(), id: doc.id });
-        });
-    })
-    .catch((err) => console.error(err));
+export const allGames = onSnapshot(q, (snapshot) => {
+    const games = [];
+    snapshot.docs.forEach((doc) => {
+        games.push({ ...doc.data(), id: doc.id });
+    });
+});
 
 export const addGame = async (gameName) => {
     try {
         const docRef = await addDoc(colRef, {
             name: gameName,
+            createdAt: serverTimestamp(),
         });
         console.log('Game added with ID: ', docRef.id);
         return true;

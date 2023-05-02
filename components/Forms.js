@@ -10,13 +10,15 @@ const Forms = () => {
 
     useEffect(() => {
         const fetchGames = async () => {
-            const myGames = await allGames.get();
-            setGames(
-                myGames.docs.map((doc) => ({
-                    name: doc.data().name,
-                    value: doc.id,
-                }))
-            );
+            const snapshot = await allGames.once('value');
+            const gameList = [];
+            snapshot.forEach((childSnapshot) => {
+                gameList.push({
+                    label: childSnapshot.key,
+                    value: childSnapshot.val(),
+                });
+            });
+            setGames(gameList);
         };
         fetchGames();
     }, []);
@@ -31,8 +33,12 @@ const Forms = () => {
             <SectionContent style={styles.container}>
                 <View>
                     <Picker
-                        items={games}
-                        value={gameValue?.name}
+                        items={
+                            games?.length > 0
+                                ? games
+                                : [{ label: 'Loading...', value: null }]
+                        }
+                        value={games}
                         placeholder="Wybierz grę"
                         onValueChange={(val) => setGameValue(val)}
                     />
