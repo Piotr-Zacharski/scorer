@@ -24,16 +24,20 @@ initializeApp(firebaseConfig);
 
 export const db = getFirestore();
 
-export const colRef = collection(db, 'newGames');
+export const gamesColRef = collection(db, 'newGames');
 
-const q = query(colRef, where('name', '==', 'Talizman'), orderBy('createdAt'));
+const q = query(
+    gamesColRef,
+    where('name', '==', 'Talizman'),
+    orderBy('createdAt')
+);
 
 // Init Auth
 export const auth = getAuth();
 
 export const addGame = async (gameName) => {
     try {
-        const docRef = await addDoc(colRef, {
+        const docRef = await addDoc(gamesColRef, {
             name: gameName,
             createdAt: serverTimestamp(),
         });

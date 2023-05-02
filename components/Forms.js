@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Picker, Section, SectionContent, Text } from 'react-native-rapi-ui';
 import { getDocs } from 'firebase/firestore';
-import { colRef } from '../firebase-config';
+import { gamesColRef } from '../firebase-config';
 
 const Forms = () => {
     const [gameValue, setGameValue] = useState('');
@@ -11,7 +11,7 @@ const Forms = () => {
 
     useEffect(() => {
         const getGames = async () => {
-            const data = await getDocs(colRef);
+            const data = await getDocs(gamesColRef);
             setGameList(
                 data.docs.map((doc) => ({
                     ...doc.data(),
