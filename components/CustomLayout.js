@@ -3,12 +3,20 @@ import { StyleSheet, View } from 'react-native';
 import { Avatar } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 
-const avatar = <Avatar.Image size={24} source={require('../assets/ja.png')} />;
-
-const logout = <Ionicons name="log-out-outline" color="white" size={20} />;
-
 // eslint-disable-next-line react/prop-types
-export default function CustomLayout({ children }) {
+export default function CustomLayout({ children, signOutUser }) {
+    const avatar = (
+        <Avatar.Image size={24} source={require('../assets/ja.png')} />
+    );
+
+    const logout = (
+        <Ionicons
+            onPress={signOutUser}
+            name="log-out-outline"
+            color="white"
+            size={24}
+        />
+    );
     return (
         <Layout>
             <TopNav

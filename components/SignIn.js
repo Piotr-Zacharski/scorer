@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { Snackbar } from '@react-native-material/core';
 import { auth } from '../firebase-config';
 import CustomButton from './CustomButton';
 
@@ -9,17 +10,25 @@ const SignIn = ({ onSignInSuccess }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [displayName, setDisplayName] = useState('');
+    const [showSnackbar, setShowSnackbar] = useState(false);
 
-    const handleSignup = (e) => {
-        e.preventDefault();
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((credentials) => {
-                console.log(credentials);
-                onSignInSuccess();
-            })
-            .catch((err) => {
-                console.log(err.message);
+    const handleSignup = async () => {
+        try {
+            const credentials = await createUserWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+            console.log(credentials?.user?.displayName);
+            onSignInSuccess();
+            const { currentUser } = auth;
+            await currentUser.updateProfile({
+                displayName: displayName ?? currentUser.displayName,
             });
+            setShowSnackbar(true);
+        } catch (err) {
+            console.log(err.message);
+        }
     };
 
     return (
@@ -48,11 +57,21 @@ const SignIn = ({ onSignInSuccess }) => {
             />
             <CustomButton
                 style={styles.btn}
-                text="Login"
+                text="Zarejestruj"
                 size="lg"
-                title="Login"
                 onPress={handleSignup}
             />
+            {showSnackbar && (
+                <Snackbar
+                    message="User created"
+                    style={{
+                        position: 'absolute',
+                        start: 16,
+                        end: 16,
+                        bottom: 16,
+                    }}
+                />
+            )}
         </View>
     );
 };
@@ -73,7 +92,6 @@ const styles = StyleSheet.create({
     },
     btn: {
         margin: 50,
-        border: 'white',
         width: 150,
         height: 50,
         backgroundColor: 'white',

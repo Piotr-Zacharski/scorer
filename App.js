@@ -1,16 +1,17 @@
 import { ThemeProvider } from 'react-native-rapi-ui';
 import { StyleSheet, View } from 'react-native';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Input } from '@rneui/base';
+import { signOut } from 'firebase/auth';
 import CustomLayout from './components/CustomLayout';
 import CustomButton, { buttons } from './components/CustomButton';
 import SignIn from './components/SignIn';
 import CustomDialog from './components/CustomDialog';
 import Forms from './components/Forms';
-import { addGame } from './firebase-config';
+import { addGame, auth } from './firebase-config';
 
 const App = () => {
-    const [isAuthenticated, setIsAuthenticated] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [showAddGameDialog, setShowAddGameDialog] = useState(false);
     const [showAddPlayerDialog, setShowAddPlayerDialog] = useState(false);
     const [showAddGameplayDialog, setShowAddGameplayDialog] = useState(false);
@@ -18,6 +19,14 @@ const App = () => {
 
     const handleSignInSuccess = () => {
         setIsAuthenticated(true);
+    };
+    const signOutUser = async () => {
+        try {
+            await signOut(auth);
+            setIsAuthenticated(false);
+        } catch (error) {
+            console.log(error.message);
+        }
     };
     const toggleAddGameDialog = () => {
         setShowAddGameDialog(!showAddGameDialog);
@@ -31,7 +40,7 @@ const App = () => {
 
     return (
         <ThemeProvider theme="light">
-            <CustomLayout>
+            <CustomLayout signOutUser={signOutUser}>
                 {isAuthenticated ? (
                     <View style={styles.container}>
                         <CustomButton
