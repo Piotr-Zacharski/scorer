@@ -1,4 +1,4 @@
-import {Ionicons} from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 // export const save = <Ionicons name="save-outline" size={20} color="white" />;
 // export const trash = <Ionicons name="trash-outline" size={20} color="white" />;
@@ -20,5 +20,3 @@ export const gameController = (
 export const googleAuth = (
     <Ionicons name="logo-google" size={20} color="white" />
 );
-
-
