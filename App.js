@@ -1,14 +1,15 @@
-import { ThemeProvider } from 'react-native-rapi-ui';
-import { StyleSheet, View } from 'react-native';
-import React, { useState } from 'react';
-import { Input } from '@rneui/base';
-import { signOut } from 'firebase/auth';
+import {ThemeProvider} from 'react-native-rapi-ui';
+import {StyleSheet, View} from 'react-native';
+import React, {useState} from 'react';
+import {Input} from '@rneui/base';
+import {signOut} from 'firebase/auth';
 import CustomLayout from './components/CustomLayout';
-import CustomButton, { buttons } from './components/CustomButton';
+import CustomButton from './components/CustomButton';
 import SignIn from './components/SignIn';
 import CustomDialog from './components/CustomDialog';
 import Forms from './components/Forms';
-import { addGame, auth } from './firebase-config';
+import {addGame, auth} from './firebase-config';
+import {buttons} from "./utils/buttons";
 
 const App = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -19,10 +20,12 @@ const App = () => {
 
     const handleSignInSuccess = () => {
         setIsAuthenticated(true);
+
     };
     const signOutUser = async () => {
         try {
             await signOut(auth);
+
             setIsAuthenticated(false);
         } catch (error) {
             console.log(error.message);
@@ -110,7 +113,7 @@ const App = () => {
                         title="Dodaj gracza"
                         onBackdropPress={toggleAddPlayerDialog}
                     >
-                        <Input placeholder="Podaj tytuł gry" />
+                        <Input placeholder="Podaj nazwę gracza" />
                         <CustomButton rightContent={buttons[1].icon} />
                     </CustomDialog>
                 ) : null}

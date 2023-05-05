@@ -1,14 +1,6 @@
-import { initializeApp } from 'firebase/app';
-import {
-    addDoc,
-    collection,
-    getFirestore,
-    orderBy,
-    query,
-    serverTimestamp,
-    where,
-} from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
+import {initializeApp} from 'firebase/app';
+import {addDoc, collection, getFirestore, orderBy, query, serverTimestamp, where,} from 'firebase/firestore';
+import {getAuth} from 'firebase/auth';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyDHOhpCfTPuihc8Rj7vh9jHQdhs8t-WR3w',
@@ -20,7 +12,7 @@ const firebaseConfig = {
 };
 
 // Init Firebase
-initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore();
 
@@ -33,7 +25,7 @@ const q = query(
 );
 
 // Init Auth
-export const auth = getAuth();
+export const auth = getAuth(app);
 
 export const addGame = async (gameName) => {
     try {

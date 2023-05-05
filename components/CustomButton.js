@@ -1,20 +1,4 @@
-import { Button } from 'react-native-rapi-ui';
-import { add, gameController, personAdd } from '../utils/icons';
-
-export const buttons = [
-    {
-        name: 'Dodaj grę',
-        icon: add,
-    },
-    {
-        name: 'Dodaj gracza',
-        icon: personAdd,
-    },
-    {
-        name: 'Dodaj rozgrywkę',
-        icon: gameController,
-    },
-];
+import {Button} from 'react-native-rapi-ui';
 
 // eslint-disable-next-line react/prop-types
 export default function CustomButton({
@@ -25,6 +9,7 @@ export default function CustomButton({
     status,
     type,
     onPress,
+    leftContent,
 }) {
     return (
         <Button
@@ -35,6 +20,7 @@ export default function CustomButton({
             status={status}
             type={type}
             onPress={onPress}
+            leftContent={leftContent}
         />
     );
 }
