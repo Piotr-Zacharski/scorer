@@ -3,10 +3,7 @@ import {
     addDoc,
     collection,
     getFirestore,
-    orderBy,
-    query,
     serverTimestamp,
-    where,
 } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
@@ -26,14 +23,8 @@ export const db = getFirestore();
 
 export const gamesColRef = collection(db, 'newGames');
 
-const q = query(
-    gamesColRef,
-    where('name', '==', 'Talizman'),
-    orderBy('createdAt')
-);
-
 // Init Auth
-export const auth = getAuth(app);
+export const auth = getAuth();
 
 export const addGame = async (gameName) => {
     try {

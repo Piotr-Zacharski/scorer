@@ -1,14 +1,10 @@
 import { Layout, TopNav } from 'react-native-rapi-ui';
 import { StyleSheet, View } from 'react-native';
-import { Avatar } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
+import { CustomAvatar } from './CustomAvatar';
 
 // eslint-disable-next-line react/prop-types
 export default function CustomLayout({ children, signOutUser }) {
-    const avatar = (
-        <Avatar.Image size={24} source={require('../assets/ja.png')} />
-    );
-
     const logout = (
         <Ionicons
             onPress={signOutUser}
@@ -17,11 +13,19 @@ export default function CustomLayout({ children, signOutUser }) {
             size={24}
         />
     );
+
     return (
         <Layout>
             <TopNav
                 middleContent="ScoreKeeper"
-                leftContent={avatar}
+                leftContent={
+                    <CustomAvatar
+                        size={24}
+                        color="white"
+                        style={{ backgroundColor: 'red' }}
+                        label="PZ"
+                    />
+                }
                 rightContent={logout}
             />
             <View style={styles.root}>{children}</View>
@@ -32,7 +36,6 @@ export default function CustomLayout({ children, signOutUser }) {
 const styles = StyleSheet.create({
     root: {
         display: 'flex',
-
         gap: 10,
         padding: 50,
         margin: 10,
